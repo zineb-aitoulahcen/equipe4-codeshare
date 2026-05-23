@@ -57,6 +57,6 @@ document.querySelector('.github-btn').addEventListener('click', () => {
 const urlParams = new URLSearchParams(window.location.search);
 const token = urlParams.get('token');
 if (token) {
-    localStorage.setItem('token', token);
+    localStorage.setItem('codeshare_token', token); // ← correct
     window.location.href = '/index.html';
 }
