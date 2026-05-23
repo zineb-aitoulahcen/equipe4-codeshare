@@ -48,10 +48,7 @@ function redirectIfLoggedIn() {
         window.location.href = 'index.html';
     }
 }
-// Bouton Continuer avec GitHub
-document.querySelector('.github-btn').addEventListener('click', () => {
-    window.location.href = 'http://localhost:3000/api/auth/github';
-});
+
 
 // Récupérer le token après callback GitHub
 const urlParams = new URLSearchParams(window.location.search);
