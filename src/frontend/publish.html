@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeShare - Publier un code</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #f5f5f0;
+            min-height: 100vh;
+        }
+
+        /* NAVBAR */
+        nav {
+            background: white;
+            padding: 12px 24px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        .logo-icon {
+            background: #2d6a4f;
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        /* FORMULAIRE */
+        .container {
+            max-width: 750px;
+            margin: 40px auto;
+            background: white;
+            border-radius: 12px;
+            padding: 32px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        h1 {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            color: #1a1a1a;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 16px;
+        }
+
+        label {
+            font-size: 14px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        label span {
+            color: red;
+        }
+
+        input, select, textarea {
+            padding: 10px 14px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+            font-family: inherit;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: #2d6a4f;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        /* CODE SOURCE */
+        .code-tabs {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 0;
+        }
+
+        .code-tab {
+            padding: 6px 16px;
+            border: 1px solid #ddd;
+            border-bottom: none;
+            border-radius: 6px 6px 0 0;
+            background: #f5f5f0;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .code-tab.active {
+            background: white;
+            font-weight: 500;
+        }
+
+        .code-editor {
+            background: #1e1e2e;
+            border-radius: 0 8px 8px 8px;
+            padding: 16px;
+            min-height: 200px;
+        }
+
+        .code-editor textarea {
+            background: transparent;
+            border: none;
+            color: #cdd6f4;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            width: 100%;
+            min-height: 180px;
+            resize: none;
+            outline: none;
+            padding: 0;
+        }
+
+        /* BOUTONS */
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .btn-annuler {
+            padding: 10px 24px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .btn-publier {
+            padding: 10px 24px;
+            border: none;
+            border-radius: 8px;
+            background: #1a1a1a;
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .btn-publier:hover { background: #333; }
+        .btn-annuler:hover { background: #f5f5f0; }
+
+        /* MESSAGE */
+        #message {
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            font-size: 14px;
+            display: none;
+        }
+
+        #message.success {
+            background: #d4edda;
+            color: #155724;
+            display: block;
+        }
+
+        #message.error {
+            background: #f8d7da;
+            color: #721c24;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav>
+        <div class="logo">
+            <div class="logo-icon">✓</div>
+            CodeShare
+        </div>
+    </nav>
+
+    <!-- FORMULAIRE -->
+    <div class="container">
+        <h1>Publier un code</h1>
+
+        <div id="message"></div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label>Titre <span>*</span></label>
+                <input type="text" id="titre" placeholder="Ex : Tri par insertion en Java" />
+            </div>
+            <div class="form-group">
+                <label>Langage <span>*</span></label>
+                <select id="langage">
+                    <option value="Java">Java</option>
+                    <option value="Python">Python</option>
+                    <option value="JavaScript">JavaScript</option>
+                    <option value="C++">C++</option>
+                    <option value="C">C</option>
+                    <option value="PHP">PHP</option>
+                    <option value="Autre">Autre</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Description</label>
+            <textarea id="description" placeholder="Décrivez brièvement votre code..."></textarea>
+        </div>
+
+        <div class="form-group">
+            <label>Code source <span>*</span></label>
+            <div class="code-tabs">
+                <div class="code-tab active">Code</div>
+                <div class="code-tab">Aperçu</div>
+            </div>
+            <div class="code-editor">
+                <textarea id="code" placeholder="// Votre code ici..."></textarea>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <button class="btn-annuler" onclick="window.location.href='index.html'">Annuler</button>
+            <button class="btn-publier" onclick="publierCode()">Publier le code</button>
+        </div>
+    </div>
+
+    <script src="auth.js"></script>
+    <script>
+        requireAuth();
+
+        async function publierCode() {
+            const titre = document.getElementById('titre').value;
+            const description = document.getElementById('description').value;
+            const code = document.getElementById('code').value;
+            const langage = document.getElementById('langage').value;
+            const user = getUser();
+            const msg = document.getElementById('message');
+
+            if (!titre || !code) {
+                msg.className = 'error';
+                msg.innerText = '⚠️ Titre et code sont obligatoires';
+                return;
+            }
+
+            try {
+                const response = await fetch('http://localhost:3000/api/codes', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${getToken()}`
+                    },
+                    body: JSON.stringify({
+                        titre, description, code, langage,
+                        user_id: user.id
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    msg.className = 'success';
+                    msg.innerText = '✅ Code publié avec succès !';
+                } else {
+                    msg.className = 'error';
+                    msg.innerText = data.message;
+                }
+
+            } catch (error) {
+                msg.className = 'error';
+                msg.innerText = 'Erreur serveur';
+            }
+        }
+    </script>
+
+</body>
+</html>
