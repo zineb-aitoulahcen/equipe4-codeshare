@@ -4,15 +4,273 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CodeShare - Accueil</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #f5f5f0;
+            min-height: 100vh;
+        }
+
+        /* NAVBAR */
+        nav {
+            background: white;
+            padding: 12px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        .logo-icon {
+            background: #2d6a4f;
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .search-input {
+            padding: 8px 16px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            font-size: 14px;
+            width: 250px;
+            outline: none;
+        }
+
+        .btn-publier {
+            padding: 8px 20px;
+            background: #1a1a1a;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .btn-publier:hover { background: #333; }
+
+        /* FILTRES */
+        .filters {
+            padding: 16px 24px;
+            display: flex;
+            gap: 8px;
+        }
+
+        .filter-btn {
+            padding: 6px 16px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            background: white;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .filter-btn.active {
+            background: #2d6a4f;
+            color: white;
+            border-color: #2d6a4f;
+        }
+
+        /* GRILLE */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            padding: 0 24px 24px;
+        }
+
+        /* CARTE */
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .card-meta {
+            font-size: 12px;
+            color: #999;
+            margin-bottom: 12px;
+        }
+
+        .code-preview {
+            background: #1e1e2e;
+            border-radius: 8px;
+            padding: 12px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            color: #cdd6f4;
+            overflow: hidden;
+            max-height: 120px;
+            margin-bottom: 12px;
+        }
+
+        .card-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .badge {
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            background: #e8f5e9;
+            color: #2d6a4f;
+        }
+
+        .badge.python { background: #e3f2fd; color: #1565c0; }
+        .badge.javascript { background: #fff8e1; color: #f57f17; }
+        .badge.cpp { background: #fce4ec; color: #c62828; }
+        .badge.java { background: #e8f5e9; color: #2d6a4f; }
+
+        /* LOADING */
+        #loading {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+        }
+    </style>
 </head>
 <body>
-    <h1>Bienvenue sur CodeShare ! ✅</h1>
-    <p>Vous êtes connecté avec succès.</p>
-    <button onclick="logout()">Se déconnecter</button>
+
+    <!-- NAVBAR -->
+    <nav>
+        <div class="logo">
+            <div class="logo-icon">✓</div>
+            CodeShare
+        </div>
+        <div class="nav-right">
+            <input type="text" class="search-input" placeholder="Rechercher un code..." id="search" oninput="filtrerCodes()">
+            <button class="btn-publier" onclick="window.location.href='publish.html'">+ Publier</button>
+        </div>
+    </nav>
+
+    <!-- FILTRES -->
+    <div class="filters">
+        <button class="filter-btn active" onclick="filtrerParLangage('Tous', this)">Tous</button>
+        <button class="filter-btn" onclick="filtrerParLangage('Java', this)">Java</button>
+        <button class="filter-btn" onclick="filtrerParLangage('Python', this)">Python</button>
+        <button class="filter-btn" onclick="filtrerParLangage('C++', this)">C++</button>
+        <button class="filter-btn" onclick="filtrerParLangage('JavaScript', this)">JavaScript</button>
+        <button class="filter-btn" onclick="filtrerParLangage('C', this)">C</button>
+    </div>
+
+    <!-- GRILLE -->
+    <div id="loading">Chargement des codes...</div>
+    <div class="grid" id="grid"></div>
 
     <script src="auth.js"></script>
     <script>
         requireAuth();
+
+        let tousLesCodes = [];
+        let langageActif = 'Tous';
+
+        // Charger les codes
+        async function chargerCodes() {
+            try {
+                const response = await fetch('http://localhost:3000/api/codes', {
+                    headers: { 'Authorization': `Bearer ${getToken()}` }
+                });
+                tousLesCodes = await response.json();
+                afficherCodes(tousLesCodes);
+                document.getElementById('loading').style.display = 'none';
+            } catch (error) {
+                document.getElementById('loading').innerText = 'Erreur de chargement';
+            }
+        }
+
+        // Afficher les codes
+        function afficherCodes(codes) {
+            const grid = document.getElementById('grid');
+            grid.innerHTML = '';
+
+            if (codes.length === 0) {
+                grid.innerHTML = '<p style="color:#999; padding:20px">Aucun code trouvé</p>';
+                return;
+            }
+
+            codes.forEach(code => {
+                const badge = code.langage ? code.langage.toLowerCase() : '';
+                const date = new Date(code.created_at).toLocaleDateString('fr-FR');
+                grid.innerHTML += `
+                    <div class="card">
+                        <div class="card-title">${code.titre}</div>
+                        <div class="card-meta">${code.auteur} · ${date}</div>
+                        <div class="code-preview">${escapeHtml(code.code)}</div>
+                        <div class="card-footer">
+                            <span class="badge ${badge}">${code.langage || 'Autre'}</span>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        // Filtrer par langage
+        function filtrerParLangage(langage, btn) {
+            langageActif = langage;
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            filtrerCodes();
+        }
+
+        // Filtrer par recherche + langage
+        function filtrerCodes() {
+            const recherche = document.getElementById('search').value.toLowerCase();
+            let codes = tousLesCodes;
+
+            if (langageActif !== 'Tous') {
+                codes = codes.filter(c => c.langage === langageActif);
+            }
+
+            if (recherche) {
+                codes = codes.filter(c =>
+                    c.titre.toLowerCase().includes(recherche) ||
+                    c.auteur.toLowerCase().includes(recherche)
+                );
+            }
+
+            afficherCodes(codes);
+        }
+
+        // Échapper le HTML
+        function escapeHtml(text) {
+            return text
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;");
+        }
+
+        chargerCodes();
     </script>
+
 </body>
 </html>
