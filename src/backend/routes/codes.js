@@ -33,4 +33,24 @@ router.post('/', async (req, res) => {
     
 });
 
+// US-06 : Récupérer tous les codes
+router.get('/', async (req, res) => {
+    try {
+        const [codes] = await db.execute(
+            `SELECT codes.id, codes.titre, codes.description, 
+            codes.code, codes.langage, codes.created_at,
+            users.nom as auteur
+            FROM codes 
+            JOIN users ON codes.user_id = users.id
+            ORDER BY codes.created_at DESC`
+        );
+
+        res.status(200).json(codes);
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Erreur serveur' });
+    }
+});
+
 module.exports = router;
