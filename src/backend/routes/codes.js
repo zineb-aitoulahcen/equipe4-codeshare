@@ -52,5 +52,30 @@ router.get('/', async (req, res) => {
         res.status(500).json({ message: 'Erreur serveur' });
     }
 });
+// Récupérer un code par son ID
+router.get('/:id', async (req, res) => {
+    const { id } = req.params;
 
+    try {
+        const [codes] = await db.execute(
+            `SELECT codes.id, codes.titre, codes.description, 
+            codes.code, codes.langage, codes.created_at,
+            users.nom as auteur
+            FROM codes 
+            JOIN users ON codes.user_id = users.id
+            WHERE codes.id = ?`,
+            [id]
+        );
+
+        if (codes.length === 0) {
+            return res.status(404).json({ message: 'Code non trouvé' });
+        }
+
+        res.status(200).json(codes[0]);
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Erreur serveur' });
+    }
+});
 module.exports = router;
