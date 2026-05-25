@@ -221,8 +221,8 @@
             codes.forEach(code => {
                 const badge = code.langage ? code.langage.toLowerCase() : '';
                 const date = new Date(code.created_at).toLocaleDateString('fr-FR');
-                grid.innerHTML += `
-                    <div class="card">
+               grid.innerHTML += `
+    <div class="card" onclick="window.location.href='code.html?id=${code.id}'" style="cursor:pointer">
                         <div class="card-title">${code.titre}</div>
                         <div class="card-meta">${code.auteur} · ${date}</div>
                         <div class="code-preview">${escapeHtml(code.code)}</div>

@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeShare - Code</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #f5f5f0;
+            min-height: 100vh;
+        }
+
+        nav {
+            background: white;
+            padding: 12px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 700;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        .logo-icon {
+            background: #2d6a4f;
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 0 24px;
+        }
+
+        .code-card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+            margin-bottom: 24px;
+        }
+
+        .code-title {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .code-meta {
+            font-size: 13px;
+            color: #999;
+            margin-bottom: 16px;
+        }
+
+        .code-description {
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 16px;
+        }
+
+        .code-block {
+            background: #1e1e2e;
+            border-radius: 8px;
+            padding: 16px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            color: #cdd6f4;
+            overflow-x: auto;
+            margin-bottom: 16px;
+        }
+
+        .badge {
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            background: #e8f5e9;
+            color: #2d6a4f;
+            display: inline-block;
+        }
+
+        /* COMMENTAIRES */
+        .comments-section {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+        }
+
+        .comments-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .comment {
+            border-bottom: 1px solid #f0f0f0;
+            padding: 12px 0;
+        }
+
+        .comment:last-child {
+            border-bottom: none;
+        }
+
+        .comment-author {
+            font-weight: 600;
+            font-size: 13px;
+            color: #2d6a4f;
+            margin-bottom: 4px;
+        }
+
+        .comment-content {
+            font-size: 14px;
+            color: #333;
+        }
+
+        .comment-date {
+            font-size: 11px;
+            color: #999;
+            margin-top: 4px;
+        }
+
+        /* FORMULAIRE COMMENTAIRE */
+        .comment-form {
+            margin-top: 20px;
+            border-top: 1px solid #f0f0f0;
+            padding-top: 20px;
+        }
+
+        .comment-form textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            resize: vertical;
+            min-height: 80px;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .comment-form textarea:focus {
+            outline: none;
+            border-color: #2d6a4f;
+        }
+
+        .error-message {
+            color: red;
+            font-size: 12px;
+            margin-top: 4px;
+            display: none;
+        }
+
+        .btn-commenter {
+            margin-top: 10px;
+            padding: 10px 24px;
+            background: #2d6a4f;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .btn-commenter:hover {
+            background: #1e4d38;
+        }
+
+        .btn-retour {
+            padding: 8px 16px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .no-comments {
+            color: #999;
+            font-size: 14px;
+            text-align: center;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav>
+        <div class="logo" onclick="window.location.href='index.html'">
+            <div class="logo-icon">✓</div>
+            CodeShare
+        </div>
+    </nav>
+
+    <div class="container">
+
+        <!-- Bouton retour -->
+        <button class="btn-retour" onclick="window.location.href='index.html'">
+            ← Retour
+        </button>
+
+        <!-- Code -->
+        <div class="code-card" id="codeCard">
+            <div id="loading">Chargement...</div>
+        </div>
+
+        <!-- Commentaires -->
+        <div class="comments-section">
+            <div class="comments-title">💬 Commentaires</div>
+            <div id="commentsList"></div>
+
+            <!-- Formulaire -->
+            <div class="comment-form">
+                <textarea id="contenu" placeholder="Laissez un commentaire..."></textarea>
+                <span class="error-message" id="commentError">
+                    Le commentaire ne peut pas être vide
+                </span>
+                <br>
+                <button class="btn-commenter" onclick="ajouterCommentaire()">
+                    Envoyer
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="auth.js"></script>
+    <script>
+        requireAuth();
+
+        // Récupérer l'ID du code depuis l'URL
+        var urlParams = new URLSearchParams(window.location.search);
+        const codeId = urlParams.get('id');
+
+        if (!codeId) {
+            window.location.href = 'index.html';
+        }
+
+        // Charger le code
+        async function chargerCode() {
+            try {
+                const response = await fetch(`http://localhost:3000/api/codes/${codeId}`, {
+                    headers: { 'Authorization': `Bearer ${getToken()}` }
+                });
+                const code = await response.json();
+
+                document.getElementById('codeCard').innerHTML = `
+                    <div class="code-title">${code.titre}</div>
+                    <div class="code-meta">Par ${code.auteur} · ${new Date(code.created_at).toLocaleDateString('fr-FR')}</div>
+                    <div class="code-description">${code.description || ''}</div>
+                    <div class="code-block">${escapeHtml(code.code)}</div>
+                    <span class="badge">${code.langage || 'Autre'}</span>
+                `;
+            } catch (error) {
+                document.getElementById('codeCard').innerHTML = '<p>Erreur de chargement</p>';
+            }
+        }
+
+        // Charger les commentaires
+        async function chargerCommentaires() {
+            try {
+                const response = await fetch(`http://localhost:3000/api/commentaires/${codeId}`, {
+                    headers: { 'Authorization': `Bearer ${getToken()}` }
+                });
+                const commentaires = await response.json();
+                const liste = document.getElementById('commentsList');
+
+                if (commentaires.length === 0) {
+                    liste.innerHTML = '<div class="no-comments">Aucun commentaire pour l\'instant</div>';
+                    return;
+                }
+
+                liste.innerHTML = commentaires.map(c => `
+                    <div class="comment">
+                        <div class="comment-author">${c.auteur}</div>
+                        <div class="comment-content">${c.contenu}</div>
+                        <div class="comment-date">${new Date(c.created_at).toLocaleDateString('fr-FR')}</div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Erreur commentaires:', error);
+            }
+        }
+
+        // Ajouter un commentaire
+        async function ajouterCommentaire() {
+            const contenu = document.getElementById('contenu').value.trim();
+            document.getElementById('commentError').style.display = 'none';
+
+            if (!contenu) {
+                document.getElementById('commentError').style.display = 'block';
+                return;
+            }
+
+            const user = getUser();
+
+            try {
+                const response = await fetch('http://localhost:3000/api/commentaires', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${getToken()}`
+                    },
+                    body: JSON.stringify({
+                        contenu,
+                        code_id: codeId,
+                        user_id: user.id
+                    })
+                });
+
+                if (response.ok) {
+                    document.getElementById('contenu').value = '';
+                    chargerCommentaires();
+                }
+            } catch (error) {
+                alert('Erreur serveur');
+            }
+        }
+
+        function escapeHtml(text) {
+            return text
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;");
+        }
+
+        chargerCode();
+        chargerCommentaires();
+    </script>
+
+</body>
+</html>

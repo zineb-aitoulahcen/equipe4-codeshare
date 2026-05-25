@@ -50,8 +50,8 @@ function redirectIfLoggedIn() {
 }
 
 // Récupérer le token après callback GitHub
-const urlParams = new URLSearchParams(window.location.search);
-const token = urlParams.get('token');
+const githubParams = new URLSearchParams(window.location.search);
+const token = githubParams.get('token');
 if (token) {
     localStorage.setItem('codeshare_token', token); // ← correct
     window.location.href = '/index.html';
