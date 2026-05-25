@@ -37,7 +37,8 @@ router.post('/register', async (req, res) => {
         res.status(201).json({ message: 'Inscription réussie' });
 
     } catch (error) {
-        res.status(500).json({ message: 'Erreur serveur', error });
+    console.error('Erreur inscription:', error);
+    res.status(500).json({ message: 'Erreur serveur', error: error.message });
     }
 });
 
@@ -82,7 +83,8 @@ router.post('/login', async (req, res) => {
 });
 
     } catch (error) {
-        res.status(500).json({ message: 'Erreur serveur', error });
+    console.error('Erreur inscription:', error);
+    res.status(500).json({ message: 'Erreur serveur', error: error.message });
     }
 });
 
