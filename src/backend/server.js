@@ -6,6 +6,7 @@ const path = require('path');
 require('dotenv').config();
 
 const authRoutes = require('./routes/auth');
+const codesRoutes = require('./routes/codes');
 
 const app = express();
 
@@ -18,6 +19,7 @@ app.use(express.static(path.join(__dirname, '../frontend')));
 
 // Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/codes', codesRoutes);
 
 // Route de test
 app.get('/', (req, res) => {
@@ -29,5 +31,3 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Serveur lancé sur http://localhost:${PORT}`);
 });
-const codesRoutes = require('./routes/codes');
-app.use('/api/codes', codesRoutes);
