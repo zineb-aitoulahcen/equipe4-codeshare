@@ -46,7 +46,7 @@ node server.js
 7. Ouvrir dans le navigateur
 http://localhost:3000
 # URL de déploiement
-
+- **Frontend** : https://equipe4-codeshare.netlify.app
 # Identifiants de test
 
 - **Email** : test@codeshare.ma
