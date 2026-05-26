@@ -31,7 +31,7 @@ npm install
 4. Créer le fichier .env
 DB_HOST=localhost
 DB_USER=root
-DB_PASSWORD=tonMotDePasse
+DB_PASSWORD=mysql
 DB_NAME=codeshare
 JWT_SECRET=codeshare_secret_key
 GITHUB_CLIENT_ID=Ov23liEWazqn4t4YYLXZ
