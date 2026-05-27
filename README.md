@@ -44,9 +44,10 @@ mysql -u root -p < src/database/schema.sql
 node server.js
 
 7. Ouvrir dans le navigateur
-http://localhost:3000
+https://app-2b69b297-20dc-457b-9c70-ac05c046681d.cleverapps.io
 # URL de déploiement
 - **Frontend** : https://equipe4-codeshare.netlify.app
+- **Backend** :https://app-2b69b297-20dc-457b-9c70-ac05c046681d.cleverapps.io
 # Identifiants de test
 
 - **Email** : test@codeshare.ma

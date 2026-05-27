@@ -197,7 +197,7 @@
         // Charger les codes
         async function chargerCodes() {
             try {
-                const response = await fetch('http://localhost:3000/api/codes', {
+                const response = await fetch('https://app-2b69b297-20dc-457b-9c70-ac05c046681d.cleverapps.io/api/codes', {
                     headers: { 'Authorization': `Bearer ${getToken()}` }
                 });
                 tousLesCodes = await response.json();

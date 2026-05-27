@@ -255,7 +255,7 @@
         // Charger le code
         async function chargerCode() {
             try {
-                const response = await fetch(`http://localhost:3000/api/codes/${codeId}`, {
+                const response = await fetch(`https://app-2b69b297-20dc-457b-9c70-ac05c046681d.cleverapps.io/api/codes/${codeId}`, {
                     headers: { 'Authorization': `Bearer ${getToken()}` }
                 });
                 const code = await response.json();
@@ -275,7 +275,7 @@
         // Charger les commentaires
         async function chargerCommentaires() {
             try {
-                const response = await fetch(`http://localhost:3000/api/commentaires/${codeId}`, {
+                const response = await fetch(`https://app-2b69b297-20dc-457b-9c70-ac05c046681d.cleverapps.io/api/commentaires/${codeId}`, {
                     headers: { 'Authorization': `Bearer ${getToken()}` }
                 });
                 const commentaires = await response.json();
@@ -311,7 +311,7 @@
             const user = getUser();
 
             try {
-                const response = await fetch('http://localhost:3000/api/commentaires', {
+                const response = await fetch('https://app-2b69b297-20dc-457b-9c70-ac05c046681d.cleverapps.io/api/commentaires', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
