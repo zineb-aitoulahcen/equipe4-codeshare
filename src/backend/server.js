@@ -12,7 +12,11 @@ const commentairesRoutes = require('./routes/commentaires');
 const app = express();
 
 // Middlewares
-app.use(cors());
+app.use(cors({
+    origin: 'https://equipe4-codeshare.netlify.app',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
 app.use(express.json());
 
 // Servir les fichiers frontend
