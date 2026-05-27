@@ -29,13 +29,13 @@ cd src/backend
 npm install
 
 4. Créer le fichier .env
-DB_HOST=localhost
-DB_USER=root
-DB_PASSWORD=mysql
-DB_NAME=codeshare
-JWT_SECRET=codeshare_secret_key
-GITHUB_CLIENT_ID=Ov23liEWazqn4t4YYLXZ
-GITHUB_CLIENT_SECRET=67659e766b48d02ad814a55b77c32b94864da2af
+DB_HOST=your_db_host
+DB_USER=your_db_user
+DB_PASSWORD=your_password
+DB_NAME=your_db_name
+JWT_SECRET=your_jwt_secret
+GITHUB_CLIENT_ID=your_github_client_id
+GITHUB_CLIENT_SECRET=your_github_client_secret
 
 5. Créer la base de données MySQL
 mysql -u root -p < src/database/schema.sql
@@ -44,7 +44,7 @@ mysql -u root -p < src/database/schema.sql
 node server.js
 
 7. Ouvrir dans le navigateur
-https://app-2b69b297-20dc-457b-9c70-ac05c046681d.cleverapps.io
+http://localhost:3000
 # URL de déploiement
 - **Frontend** : https://equipe4-codeshare.netlify.app
 - **Backend** :https://app-2b69b297-20dc-457b-9c70-ac05c046681d.cleverapps.io
