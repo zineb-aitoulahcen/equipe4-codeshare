@@ -145,7 +145,7 @@ router.get('/github/callback', async (req, res) => {
             { expiresIn: '24h' }
         );
 
-        res.redirect(`/index.html?token=${token}`);
+      res.redirect(`${process.env.FRONTEND_URL}/index.html?token=${token}`);
 
     } catch (error) {
         console.error(error);
